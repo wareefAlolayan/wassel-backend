@@ -1,6 +1,7 @@
 from django.urls import path
-from .views import TeamsIndex
+from .views import TeamsIndex , TeamDetail
 
 urlpatterns = [
     path('teams/', TeamsIndex.as_view(), name='team_index'),
+    path('teams/<int:team_id>/' , TeamDetail.as_view() , name='team_detail')
 ]
