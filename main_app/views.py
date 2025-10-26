@@ -15,9 +15,20 @@ class TeamsIndex(APIView):
     # permission_classes = [IsAuthenticated]
     def get(self, request): # Read teams list
         try:
-            queryset = Team.objects.all() 
-            serializer = TeamSerializer(queryset, many=True)
+            queryset = Team.objects.all() #get all objects of model team
+            serializer = TeamSerializer(queryset, many=True) #send it to serializer to convert object to json 
             return Response(serializer.data ,  status=status.HTTP_200_OK)
+        except Exception as error:
+            return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    def post(self, request): #Create new team
+        # permission_classes = [IsAuthenticated]
+        try:
+            serializer = TeamSerializer(data=request.data) #all data in request that is in json will be taken and converted to object
+            if serializer.is_valid(): #
+                serializer.save() #
+                return Response(serializer.data ,status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as error:
             return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
        
