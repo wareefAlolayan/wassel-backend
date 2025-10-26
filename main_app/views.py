@@ -12,7 +12,7 @@ User = get_user_model()
 
 # Create your views here.
 class TeamsIndex(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     def get(self, request): # Read teams list
         try:
             queryset = Team.objects.all() 
