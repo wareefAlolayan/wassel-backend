@@ -41,4 +41,12 @@ class TeamDetail(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as error:
             return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
+        
+    def delete(self, request, team_id):
+        try:
+            queryset = get_object_or_404(Team, id=team_id)
+            queryset.delete()
+            return Response({'message':f'Team {team_id} is deleted '}, status=status.HTTP_204_NO_CONTENT)
+        except Exception as error:
+            return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
