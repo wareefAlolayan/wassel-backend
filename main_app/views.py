@@ -76,3 +76,11 @@ class ShiftIndex(APIView) :
         except Exception as error:
             return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
+class ShiftDetail(APIView):
+    def get(self,request , shift_id):
+        try:
+            queryset =get_object_or_404(Shift,id=shift_id) 
+            serializer = ShiftSerializer(queryset)
+            return Response(serializer.data , status=status.HTTP_200_OK)
+        except Exception as error:
+            return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
