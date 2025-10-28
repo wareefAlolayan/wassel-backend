@@ -84,3 +84,27 @@ class ShiftDetail(APIView):
             return Response(serializer.data , status=status.HTTP_200_OK)
         except Exception as error:
             return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class AssignEmployee(APIView):
+    def patch(self, request, shift_id , employee_id):
+        try:
+            shift = get_object_or_404(Shift, id=shift_id)
+            employee = get_object_or_404(Employee, id=employee_id)
+            shift.employees.add(employee)
+            return Response({
+                            'message': f'Shift {shift_id} is assigned to Employee {employee_id}.'
+                             }, status=status.HTTP_200_OK)
+        except Exception as error:
+            return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+class UnassignEmployee(APIView):
+    def patch(self, request, shift_id , employee_id):
+        try:
+            shift = get_object_or_404(Shift, id=shift_id)
+            employee = get_object_or_404(Employee, id=employee_id)
+            shift.employees.remove(employee)
+            return Response({
+                            'message': f'Shift {shift_id} is removed from Employee {employee_id}.',
+                             }, status=status.HTTP_200_OK)
+        except Exception as error:
+            return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
