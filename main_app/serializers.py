@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Team ,  Employee
+from .models import Team ,  Employee , Shift
 
 
 # this will take our django db object and make it into json 
@@ -16,3 +16,10 @@ class EmployeeSerializer(serializers.ModelSerializer):
         model = Employee
         fields = '__all__'
 
+class ShiftSerializer(serializers.ModelSerializer) :
+    
+    employees = EmployeeSerializer(many=True , read_only=True)
+    
+    class Meta :
+        model = Shift
+        fields = '__all__'

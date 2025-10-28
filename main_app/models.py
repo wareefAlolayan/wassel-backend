@@ -28,3 +28,6 @@ class Shift(models.Model):
     
     def __str__(self):
         return f'{self.get_shift_type_display()}  -  {self.date}'
+    
+    class Meta:
+        ordering = ['-date']
