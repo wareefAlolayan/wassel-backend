@@ -31,3 +31,21 @@ class Shift(models.Model):
     
     class Meta:
         ordering = ['-date']
+        
+        
+REQUEST_STATUS = {
+    ('P' , 'Pending'),
+    ('A' , 'Accepted'),
+    ('D' , 'Denied'),
+}
+
+class VacationRequest(models.Model):
+    employee = models.ForeignKey(Employee , on_delete=models.CASCADE )
+    start_date = models.DateField('vacation-start')
+    end_date = models.DateField('vacation-end')
+    reason = models.TextField()
+    status = models.CharField(max_length=1 , choices=REQUEST_STATUS)
+    
+    def __str__(self):
+        return f'{self.employee.username} - {self.get_status_display()} '
+    
