@@ -186,6 +186,9 @@ class AcceptVacationRequest(APIView):
              employee = vacation_request.employee
              vacation_request.status = 'A'
              vacation_request.save()
+             days_off = (vacation_request.end_date - vacation_request.start_date).days + 1 #stackoverflow
+             employee.vaction_days_left -= days_off
+             employee.save()
              shifts_to_remove = Shift.objects.filter(date__gte=vacation_request.start_date,date__lte=vacation_request.end_date) #shouq
              for shift in shifts_to_remove :
                  if employee in shift.employees.all():
