@@ -178,3 +178,18 @@ class DenyVacationRequest(APIView):
              return Response({'message': f'Vacation request {vacationRequest_id} has been denied.'}, status=status.HTTP_200_OK)
         except Exception as error:
             return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class AcceptVacationRequest(APIView):
+    def patch (self, request , vacationRequest_id) :
+        try:
+             vacation_request = get_object_or_404(VacationRequest,id=vacationRequest_id)
+             employee = vacation_request.employee
+             vacation_request.status = 'A'
+             vacation_request.save()
+             shifts_to_remove = Shift.objects.filter(date__gte=vacation_request.start_date,date__lte=vacation_request.end_date) #shouq
+             for shift in shifts_to_remove :
+                 if employee in shift.employees.all():
+                     shift.employees.remove(employee) #geeksforgeeks
+             return Response({'message': f'Vacation request {vacationRequest_id} has been accepted.'}, status=status.HTTP_200_OK)
+        except Exception as error:
+            return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
