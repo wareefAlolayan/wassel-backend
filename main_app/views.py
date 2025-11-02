@@ -169,3 +169,12 @@ class VacationRequestDetail(APIView):
         except Exception as error:
             return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
  
+class DenyVacationRequest(APIView):
+    def patch (self, request , vacationRequest_id) :
+        try:
+             vacation_request = get_object_or_404(VacationRequest,id=vacationRequest_id)
+             vacation_request.status = 'D'
+             vacation_request.save()
+             return Response({'message': f'Vacation request {vacationRequest_id} has been denied.'}, status=status.HTTP_200_OK)
+        except Exception as error:
+            return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
