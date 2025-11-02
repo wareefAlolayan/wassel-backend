@@ -44,7 +44,7 @@ class VacationRequest(models.Model):
     start_date = models.DateField('vacation-start')
     end_date = models.DateField('vacation-end')
     reason = models.TextField()
-    status = models.CharField(max_length=1 , choices=REQUEST_STATUS)
+    status = models.CharField(max_length=1 , choices=REQUEST_STATUS, default='P')
     
     def __str__(self):
         return f'{self.employee.username} - {self.get_status_display()} '

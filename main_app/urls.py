@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import TeamsIndex , TeamDetail , EmployeesIndex , ShiftIndex , ShiftDetail , AssignEmployee , UnassignEmployee , EmployeeDetail
+from .views import TeamsIndex , TeamDetail , EmployeesIndex , ShiftIndex , ShiftDetail , AssignEmployee , UnassignEmployee , EmployeeDetail , VacationRequestsIndex , EmployeeVacationRequestCreate , VacationRequestDetail
 
 urlpatterns = [
     path('teams/', TeamsIndex.as_view(), name='team_index'),
@@ -10,4 +10,7 @@ urlpatterns = [
     path('shifts/<int:shift_id>' , ShiftDetail.as_view() , name='shift_detail' ),
     path('shifts/<int:shift_id>/assign/<int:employee_id>' , AssignEmployee.as_view() , name='assign_emp' ),
     path('shifts/<int:shift_id>/unassign/<int:employee_id>' , UnassignEmployee.as_view() , name='unassign_employee' ),
+    path('vrequests/' , VacationRequestsIndex.as_view() , name='vrequests' ),
+    path('vrequests/<int:vacationRequest_id>' , VacationRequestDetail.as_view() , name='vrequest_detail' ),
+    path('vrequests/employee/<int:emp_id>' , EmployeeVacationRequestCreate.as_view() , name='vrequest_create' ),
 ]

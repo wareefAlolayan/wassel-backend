@@ -1,9 +1,9 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Team , Employee , Shift
+from .models import Team , Employee , Shift , VacationRequest
 from rest_framework import status
 from django.shortcuts import get_object_or_404
-from .serializers import TeamSerializer , EmployeeSerializer , ShiftSerializer
+from .serializers import TeamSerializer , EmployeeSerializer , ShiftSerializer , VacationRequestSerializer
 from rest_framework.permissions import IsAuthenticated , AllowAny , IsAuthenticatedOrReadOnly
 from django.contrib.auth import get_user_model
 
@@ -116,3 +116,56 @@ class UnassignEmployee(APIView):
                              }, status=status.HTTP_200_OK)
         except Exception as error:
             return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class VacationRequestsIndex(APIView):
+    def get(self, request): 
+        try:
+            queryset = VacationRequest.objects.all() #get all objects of model VacationRequest
+            serializer = VacationRequestSerializer(queryset, many=True) #send it to serializer to convert object to json 
+            return Response(serializer.data ,  status=status.HTTP_200_OK)
+        except Exception as error:
+            return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class EmployeeVacationRequestCreate(APIView):
+    def post (self,request,emp_id):
+        try:
+            request_data = request.data
+            request_data['employee'] = emp_id
+            serializer = VacationRequestSerializer(data=request_data)
+            
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data ,status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as error:
+            return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class VacationRequestDetail(APIView):
+    def get(self,request , vacationRequest_id):
+        try:
+            queryset =get_object_or_404(VacationRequest,id=vacationRequest_id) 
+            serializer = VacationRequestSerializer(queryset)
+            return Response(serializer.data , status=status.HTTP_200_OK)
+        except Exception as error:
+            return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+       
+    def patch(self, request, vacationRequest_id): #update VacationRequest details 
+        try:
+            queryset = get_object_or_404(VacationRequest, id=vacationRequest_id) #find the VacationRequest 
+            serializer = VacationRequestSerializer(queryset, data=request.data , partial = True) #pass to serializer , partial ref:django-rest-framework.org 
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data , status=status.HTTP_200_OK) #updated
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as error:
+            return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+    def delete(self, request, vacationRequest_id):
+        try:
+            queryset = get_object_or_404(VacationRequest, id=vacationRequest_id)
+            queryset.delete()
+            return Response({'message':f'VacationRequest {vacationRequest_id} is deleted '}, status=status.HTTP_204_NO_CONTENT)
+        except Exception as error:
+            return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+ 
