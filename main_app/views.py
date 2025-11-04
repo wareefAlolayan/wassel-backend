@@ -6,9 +6,9 @@ from django.shortcuts import get_object_or_404
 from .serializers import TeamSerializer , EmployeeSerializer , ShiftSerializer , VacationRequestSerializer
 from rest_framework.permissions import IsAuthenticated , AllowAny , IsAuthenticatedOrReadOnly
 from django.contrib.auth import get_user_model
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import authenticate
 
-
-User = get_user_model()
 
 # Create your views here.
 class TeamsIndex(APIView):
@@ -70,7 +70,7 @@ class EmployeesIndex(APIView) :
         except Exception as error:
             return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 class EmployeeDetail(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     def get(self,request , emp_id):
         try:
             queryset =get_object_or_404(Employee,id=emp_id) 
@@ -210,6 +210,5 @@ class AcceptVacationRequest(APIView):
              return Response({'message': f'Vacation request {vacationRequest_id} has been accepted.'}, status=status.HTTP_200_OK)
         except Exception as error:
             return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
         
 # permission_classes = [AllowAny]
