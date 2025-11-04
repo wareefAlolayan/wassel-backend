@@ -12,6 +12,7 @@ User = get_user_model()
 
 # Create your views here.
 class TeamsIndex(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request): # Read teams list
         try:
             queryset = Team.objects.all() #get all objects of model team
@@ -31,6 +32,7 @@ class TeamsIndex(APIView):
             return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class TeamDetail(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self,request , team_id):
         try:
             queryset =get_object_or_404(Team,id=team_id) 
@@ -59,6 +61,7 @@ class TeamDetail(APIView):
             return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 class EmployeesIndex(APIView) :
+    permission_classes = [IsAuthenticated]
     def get(self, request): # Read Employee list
         try:
             queryset = Employee.objects.all() #get all objects of model Employee
@@ -67,6 +70,7 @@ class EmployeesIndex(APIView) :
         except Exception as error:
             return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 class EmployeeDetail(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self,request , emp_id):
         try:
             queryset =get_object_or_404(Employee,id=emp_id) 
@@ -76,6 +80,7 @@ class EmployeeDetail(APIView):
             return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
        
 class ShiftIndex(APIView) :
+    permission_classes = [IsAuthenticated]
     def get (self,request) :
         try :
             queryset = Shift.objects.all()
@@ -85,6 +90,7 @@ class ShiftIndex(APIView) :
             return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
 class ShiftDetail(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self,request , shift_id):
         try:
             queryset =get_object_or_404(Shift,id=shift_id) 
@@ -95,6 +101,7 @@ class ShiftDetail(APIView):
 
 
 class AssignEmployee(APIView):
+    permission_classes = [IsAuthenticated]
     def patch(self, request, shift_id , employee_id):
         try:
             shift = get_object_or_404(Shift, id=shift_id)
@@ -105,7 +112,9 @@ class AssignEmployee(APIView):
                              }, status=status.HTTP_200_OK)
         except Exception as error:
             return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 class UnassignEmployee(APIView):
+    permission_classes = [IsAuthenticated]
     def patch(self, request, shift_id , employee_id):
         try:
             shift = get_object_or_404(Shift, id=shift_id)
@@ -119,6 +128,7 @@ class UnassignEmployee(APIView):
 
 
 class VacationRequestsIndex(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request): 
         try:
             queryset = VacationRequest.objects.all() #get all objects of model VacationRequest
@@ -128,6 +138,7 @@ class VacationRequestsIndex(APIView):
             return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class EmployeeVacationRequestCreate(APIView):
+    permission_classes = [IsAuthenticated]
     def post (self,request,emp_id):
         try:
             request_data = request.data
@@ -142,6 +153,7 @@ class EmployeeVacationRequestCreate(APIView):
             return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class VacationRequestDetail(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self,request , vacationRequest_id):
         try:
             queryset =get_object_or_404(VacationRequest,id=vacationRequest_id) 
@@ -170,6 +182,7 @@ class VacationRequestDetail(APIView):
             return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
  
 class DenyVacationRequest(APIView):
+    permission_classes = [IsAuthenticated]
     def patch (self, request , vacationRequest_id) :
         try:
              vacation_request = get_object_or_404(VacationRequest,id=vacationRequest_id)
@@ -180,6 +193,7 @@ class DenyVacationRequest(APIView):
             return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 class AcceptVacationRequest(APIView):
+    permission_classes = [IsAuthenticated]
     def patch (self, request , vacationRequest_id) :
         try:
              vacation_request = get_object_or_404(VacationRequest,id=vacationRequest_id)
@@ -196,3 +210,6 @@ class AcceptVacationRequest(APIView):
              return Response({'message': f'Vacation request {vacationRequest_id} has been accepted.'}, status=status.HTTP_200_OK)
         except Exception as error:
             return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        
+# permission_classes = [AllowAny]

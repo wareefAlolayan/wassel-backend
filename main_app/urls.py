@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import TeamsIndex , TeamDetail , EmployeesIndex , ShiftIndex , ShiftDetail , AssignEmployee , UnassignEmployee , EmployeeDetail , VacationRequestsIndex , EmployeeVacationRequestCreate , VacationRequestDetail , DenyVacationRequest , AcceptVacationRequest
+from rest_framework_simplejwt.views import TokenObtainPairView , TokenRefreshView
 
 urlpatterns = [
     path('teams/', TeamsIndex.as_view(), name='team_index'),
@@ -15,4 +16,8 @@ urlpatterns = [
     path('vrequests/employee/<int:emp_id>' , EmployeeVacationRequestCreate.as_view() , name='vrequest_create' ),
     path('vrequests/<int:vacationRequest_id>/deny/', DenyVacationRequest.as_view(), name='deny-vacation-request'),
     path('vrequests/<int:vacationRequest_id>/accept/', AcceptVacationRequest.as_view(), name='accept-vacation-request'),
+    
+    path('login/' , TokenObtainPairView.as_view() , name='login'),
+    path('token/refresh/' , TokenRefreshView.as_view() , name='token_refresh'),
+    
 ]
