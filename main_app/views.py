@@ -4,11 +4,7 @@ from .models import Team , Employee , Shift , VacationRequest
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from .serializers import TeamSerializer , EmployeeSerializer , ShiftSerializer , VacationRequestSerializer
-from rest_framework.permissions import IsAuthenticated , AllowAny , IsAuthenticatedOrReadOnly
-from django.contrib.auth import get_user_model
-from rest_framework_simplejwt.tokens import RefreshToken
-from django.contrib.auth import authenticate
-
+from rest_framework.permissions import IsAuthenticated , AllowAny 
 
 # Create your views here.
 class TeamsIndex(APIView):
@@ -43,8 +39,8 @@ class TeamDetail(APIView):
        
     def patch(self, request, team_id): #update team details 
         try:
-            queryset = get_object_or_404(Team, id=team_id) #find the team 
-            serializer = TeamSerializer(queryset, data=request.data) #pass to serializer 
+            queryset = get_object_or_404(Team, id=team_id) 
+            serializer = TeamSerializer(queryset, data=request.data) 
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data , status=status.HTTP_200_OK) #updated
@@ -64,8 +60,8 @@ class EmployeesIndex(APIView) :
     permission_classes = [IsAuthenticated]
     def get(self, request): # Read Employee list
         try:
-            queryset = Employee.objects.all() #get all objects of model Employee
-            serializer = EmployeeSerializer(queryset, many=True) #send it to serializer to convert object to json 
+            queryset = Employee.objects.all() 
+            serializer = EmployeeSerializer(queryset, many=True)
             return Response(serializer.data ,  status=status.HTTP_200_OK)
         except Exception as error:
             return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -164,11 +160,11 @@ class VacationRequestDetail(APIView):
        
     def patch(self, request, vacationRequest_id): #update VacationRequest details 
         try:
-            queryset = get_object_or_404(VacationRequest, id=vacationRequest_id) #find the VacationRequest 
-            serializer = VacationRequestSerializer(queryset, data=request.data , partial = True) #pass to serializer , partial ref:django-rest-framework.org 
+            queryset = get_object_or_404(VacationRequest, id=vacationRequest_id) 
+            serializer = VacationRequestSerializer(queryset, data=request.data , partial = True) #partial ref:django-rest-framework.org 
             if serializer.is_valid():
                 serializer.save()
-                return Response(serializer.data , status=status.HTTP_200_OK) #updated
+                return Response(serializer.data , status=status.HTTP_200_OK)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as error:
             return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -211,4 +207,3 @@ class AcceptVacationRequest(APIView):
         except Exception as error:
             return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-# permission_classes = [AllowAny]
