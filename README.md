@@ -21,7 +21,7 @@ this repo contains the backend code of Wassel .backend is responsible for mangin
 https://github.com/wareefAlolayan/wassel-frontend
 
 ## ERD
-![ERD](image.png)
+![ERD](<Database ER diagram (crow's foot).png>)
 
 ## Routing table 
 | **Method** | **URL** | **Handler**| **Action**|
